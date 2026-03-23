@@ -1,10 +1,11 @@
-let mysql = require ('mysql');
+let mysql = require ('mysql2');
 
 let con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
-    database: "test"
+    password: "Wowturtle123",
+    database: "test",
+    port: 3308
 });
 
 con.connect(function(err) {
