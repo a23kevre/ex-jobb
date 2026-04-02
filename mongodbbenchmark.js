@@ -1,0 +1,41 @@
+const mongodb = require("./mongodbconnection");
+const fs = require("fs");
+
+const iterations = 50;
+
+// array med nummer1 -> nummer50
+const words = [];
+for (let i = 1; i <= iterations; i++) {
+    words.push(`nummer${i}`);
+}
+
+let csv = "word,start,end,delta,result\n";
+
+async function mongodbBench() {
+
+    const db = await mongodb();
+    const collection = db.collection("testing");
+
+    for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        const start = performance.now();
+
+        const results = await collection.find({
+            word: { $regex: word, $options: "i" }
+        }).toArray();
+
+        const end = performance.now();
+        const delta = end - start;
+        const resultCount = results.length;
+        console.log(
+            `#${i + 1} | ${word} | ${delta.toFixed(2)} ms | results: ${resultCount}`
+        );
+        csv += `${word},${start},${end},${delta},${resultCount}\n`;
+    }
+    // spara fil
+    fs.writeFileSync("mongodbbenchmark.csv", csv);
+    console.log("\n✅ Finished! Data saved to mongodbbenchmark.csv");
+
+    process.exit(); // avsluta programmet
+}
+mongodbBench();
