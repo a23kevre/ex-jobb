@@ -1,10 +1,22 @@
 // Select the database to use.
 use('test');
 
-// Loop insert nummer1->nummer50
-for (let i = 1; i <= 50; i++) {
-  db.getCollection('testing').insertOne({
+function randomWord(length) {
+  const alfabet = "abcdefghijklmnopqrstuvwxyz";
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    result += alfabet.charAt(Math.floor(Math.random() * alfabet.length));
+  }
+  return result;
+}
+
+let values = []; // array med alla ord för att kunna göra insertmany
+
+for (let i = 1; i <= 10000; i++) {
+  values.push({
     nummer: i,
-    word: "nummer" + i
+    word: randomWord(6)
   });
 }
+db.getCollection('testing').insertMany(values);
