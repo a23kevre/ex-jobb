@@ -24,3 +24,5 @@ END //
 DELIMITER ;
 
 CALL insert_numbers();
+
+CREATE INDEX idx_word ON testing(word);
