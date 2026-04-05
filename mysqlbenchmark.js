@@ -1,23 +1,7 @@
 const mysql = require('./mysqlconnection');
 const fs = require('fs');
 const { performance } = require("perf_hooks");
-
-const iterations = 1000;
-
-function randomWord(length) {
-    const chars = "abcdefghijklmnopqrstuvwxyz";
-    let result = "";
-
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
-
-const words = [];
-for (let i = 0; i < iterations; i++) {
-    words.push(randomWord(2));
-}
+const words = JSON.parse(fs.readFileSync("words.json"));
 
 let csv = "word,start,end,delta,result\n";
 

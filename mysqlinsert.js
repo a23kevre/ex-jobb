@@ -1,25 +1,10 @@
 const mysql = require('./mysqlconnection');
+const fs = require("fs");
+const data = JSON.parse(fs.readFileSync("data.json"));
 
-function randomWord(length) {
-  const alfabet = "abcdefghijklmnopqrstuvwxyz";
-  let result = "";
+const values = data.map(row => [row.nummer, row.word]);
 
-  for (let i = 0; i < length; i++) {
-    result += alfabet.charAt(Math.floor(Math.random() * alfabet.length));
-  }
-  return result;
-}
-
-const values = [];
-
-for (let i = 1; i <= 10000; i++) {
-  values.push([i, randomWord(6)]);
-}
-
-mysql.query(
-  "INSERT INTO testing (nummer, word) VALUES ?",
-  [values],
-  (err, result) => {
+mysql.query("INSERT INTO testing (nummer, word) VALUES ?", [values], (err, result) => {
     if (err) {
       console.error(err);
       return;
